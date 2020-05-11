@@ -1,1 +1,2 @@
-./beautiful-bridges-rust/target/debug/*
+*./beautiful-bridges-rust/target/debug/*
+*.o
