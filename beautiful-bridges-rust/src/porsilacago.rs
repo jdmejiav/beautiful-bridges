@@ -104,58 +104,60 @@ fn main() {
 fn find_path(_coordinate_x:Vec<usize>,_coordinate_y:Vec<usize>,_h:usize,_a:usize,_b:usize)->usize{
 	let mut matrix:Vec<Vec<usize>> = Vec::new();	
 	matrix.resize(_coordinate_y.len(),Vec::new());
-	let mut matrix_bridge:Vec<Vec<usize>> = Vec::new();
-	matrix_bridge.resize(_coordinate_y.len(),Vec::new());
-	let mut matrix_arch:Vec<Vec<usize>> = Vec::new();
-	matrix_arch.resize(_coordinate_y.len(),Vec::new());
-	
+	let mut _bridge:Vec<usize> = Vec::new();
+	let mut _arch:Vec<usize> =Vec::new();
 	matrix[0].resize(_coordinate_y.len(),0);
-	matrix_bridge[0].resize(_coordinate_y.len(),0);
-	matrix_arch[0].resize(_coordinate_y.len(),0);
 	
-	matrix_bridge[0][0]=_a*(_h-_coordinate_y[0]);
-	matrix_arch[0][0]=_b*(usize::pow(_coordinate_x[0],2));
-	
-	matrix[0][0] = matrix_bridge[0][0] + matrix_arch[0][0];
+	let  _bridge0 = _a*(_h-_coordinate_y[0]);
+	let  _arch0=_b*(usize::pow(_coordinate_x[0],2));
+	matrix[0][0] = _bridge0 + _arch0;
 	for i in 1.._coordinate_x.len(){
 		matrix[i].resize(_coordinate_y.len(),0);
-		matrix_bridge[i].resize(_coordinate_y.len(),0);
-		matrix_arch[i].resize(_coordinate_y.len(),0);
-		
-		matrix_bridge[i][0]=matrix_bridge[0][0]+_a*(_h-_coordinate_y[i]);
-		matrix_arch[i][0]=matrix_arch[0][0]+_b*(usize::pow(_coordinate_x[i]-_coordinate_x[0],2));	
-		matrix[i][0] = matrix_bridge[i][0]+matrix_arch[i][0]; 		
+		matrix[i][0] = _a*(_h-_coordinate_y[i])+_b*(_coordinate_x[i]*_coordinate_x[i])+_arch0+_bridge0; 		
 	}
+	
+	
 
+	_bridge.push(_a*((2*_h)-_coordinate_y[0]-_coordinate_y[1]));
+	_arch.push(_b*(usize::pow(_coordinate_x[1]-_coordinate_x[0],2)+usize::pow(_coordinate_x[0],2)));
+	
 	for i in 1.._coordinate_y.len(){
-
-		for k in i.._coordinate_x.len(){
+		
+		for k in i.._coordinate_y.len(){
 			
-			if  i==k{
-				matrix_bridge[i][i] = matrix_bridge[i][i-1];
-				matrix_arch[i][i]=matrix_arch[i][i-1];
-				matrix[i][i]=matrix[i][i-1]; 
+			let mut tmp_bridge = 0;
+			
+			let mut tmp_arch = 0;
+			
+			if k==i {
+				matrix[i][i]=matrix[k][i-1];
+				tmp_bridge = _bridge.clone().pop().unwrap();
+				tmp_arch = _arch.clone().pop().unwrap();
+				_bridge.push(tmp_bridge.clone());
+				_arch.push(tmp_arch.clone());
 			}else{
-			
-			let temp_bridge= matrix_bridge[i][i]+_a*(_h-_coordinate_y[k]);
-			let temp_arch= matrix_arch[i][i]+_b*(usize::pow(_coordinate_x[k]-_coordinate_x[i],2));
 				
-				if temp_bridge+temp_arch < matrix[k][i-1]{
-					matrix_bridge[k][i]=temp_bridge;
-					matrix_arch[k][i]=temp_arch;
-					matrix[k][i]=temp_bridge+temp_arch;
+				let _tmp1 = tmp_bridge+_a*(_h-_coordinate_y[k]);
+				let _tmp2 = tmp_arch + _b*(usize::pow(_coordinate_x[k]-_coordinate_x[i],2));
+				println!("_bridge {}, _arch {}",tmp_arch,tmp_bridge);
+				
+				for w in _bridge.clone().iter(){
+					print!("{} ",w);
+	
+				}
+				
+				println!("");
 			
+				if _tmp1+_tmp2 < matrix[k][i-1]{
+					_bridge.push(_tmp1);
+					_arch.push(_tmp2);
+					matrix [k][i]=_tmp1+_tmp2;
 				}else {
-					matrix_bridge[k][i]=matrix_bridge[k][i-1];
-					matrix_arch[k][i]=matrix_arch[k][i-1];
 					matrix[k][i]=matrix[k][i-1];
 				}
 			}
-		}
-	}
-	
-	
-	
+		}		
+	}	
 	for i in 0.._coordinate_y.len(){
 		for j in 0.._coordinate_x.len(){
 			print! ("{}\t",matrix[j][i]);
