@@ -11,13 +11,13 @@ fn main() {
 	let _num_iter:usize = match _first_line[0].trim().parse(){
 		Ok(num)=>{
 			if num < 2 {
-				println!("Impossible, first number should be the number of entries, and it should be a number 2≤n");
+				println!("impossible");
 				process::exit(0x0100);
 			}
 			num
 		},
 		Err(_)=>{
-			println!("Impossible, first number should be the number of entries, and it should be a number between 2≤n≤10⁴");
+			println!("impossible");
 			process::exit(0x0100)
 		},
 
@@ -25,14 +25,14 @@ fn main() {
 	let _h:usize = match _first_line[1].trim().parse(){
 		Ok(num)=>{
 			if num < 1 {
-				println!("Impossible, second number of the first line, should be the heigh of the bridge an it should be 1≤h");
+				println!("impossible");
 				process::exit(0x0100)
 			}
 			num
 
 		},
 		Err(_)=>{
-			println!("Impossible, second number of the first line should the heigh of the bridge, and it should be a number between 1≤h≤10⁵");
+			println!("impossible");
 			process::exit(0x0100)
 		}
 
@@ -41,26 +41,26 @@ fn main() {
 	let _a:usize = match _first_line[2].trim().parse(){
 		Ok(num)=>{
 			if num <1{
-				println!("Impossible, third number of the first line, means the pillars cost");
+				println!("impossible");
 				process::exit(0x0100)
 			}
 			num
 		},
 		Err(_) =>{
-			println!("Impossible, third number of the first line, means the pillars cost");
+			println!("impossible");
 			process::exit(0x0100)
 		}
 	};
 	let _b:usize = match _first_line[3].trim().parse(){
 		Ok(num)=>{
 			if num<1{
-				println!("Imposiible, fourth number of the first line, means the arch cost");
+				println!("impossible");
 				process::exit(0x0100)
 			}
 			num
 		},
 		Err(_)=>{
-			println!("Impossible, fourth number of the first line, means the arch cost");
+			println!("impossible");
 			process::exit(0x0100);
 		}
 
@@ -75,7 +75,7 @@ fn main() {
 		_coordinate_x.push(match vec_temp[0].trim().parse(){
 			Ok(num) => num,
 			Err(_)=>{
-				println!("Impossible, coordinates should be numbers, and it should be higher than 0");
+				println!("impossible");
 				process::exit(0x0100)
 			}
 			
@@ -83,13 +83,13 @@ fn main() {
 		_coordinate_y.push(match vec_temp[1].trim().parse(){
 			Ok(num)=>{
 				if num>_h{
-					println!("Impossible, y coordinate can't be higher than high");
+					println!("impossible");
 					process::exit(0x0100)
 				}
 				num
 			},
 			Err(_)=>{
-				println!("Impossible, coordinates should be numbersm, and it should be higher than 0");
+				println!("impossible");
 					process::exit(0x0100)
 			}
 			
@@ -108,7 +108,7 @@ fn find_path(_coordinate_x:Vec<usize>,_coordinate_y:Vec<usize>,_h:usize,_a:usize
 	matrix_bridge.resize(_coordinate_y.len(),Vec::new());
 	let mut matrix_arch:Vec<Vec<usize>> = Vec::new();
 	matrix_arch.resize(_coordinate_y.len(),Vec::new());
-	
+	let mut _r=0;
 	matrix[0].resize(_coordinate_y.len(),0);
 	matrix_bridge[0].resize(_coordinate_y.len(),0);
 	matrix_arch[0].resize(_coordinate_y.len(),0);
@@ -124,9 +124,14 @@ fn find_path(_coordinate_x:Vec<usize>,_coordinate_y:Vec<usize>,_h:usize,_a:usize
 		
 		matrix_bridge[i][0]=matrix_bridge[0][0]+_a*(_h-_coordinate_y[i]);
 		matrix_arch[i][0]=matrix_arch[0][0]+_b*(usize::pow(_coordinate_x[i]-_coordinate_x[0],2));	
+		_r=(_coordinate_x[i]-_coordinate_x[0])/2;
+		if _r+_coordinate_y[i]> _h{
+			println!("impossible");
+			process::exit(0x0100);
+		}
 		matrix[i][0] = matrix_bridge[i][0]+matrix_arch[i][0]; 		
 	}
-
+	
 	for i in 1.._coordinate_y.len(){
 
 		for k in i.._coordinate_x.len(){
@@ -143,8 +148,13 @@ fn find_path(_coordinate_x:Vec<usize>,_coordinate_y:Vec<usize>,_h:usize,_a:usize
 				if temp_bridge+temp_arch < matrix[k][i-1]{
 					matrix_bridge[k][i]=temp_bridge;
 					matrix_arch[k][i]=temp_arch;
+					_r=(_coordinate_x[k]-_coordinate_x[i])/2;
+					if _r+_coordinate_y[k]>_h{
+						println!("impossible");
+						process::exit(0x0100);
+					}
 					matrix[k][i]=temp_bridge+temp_arch;
-			
+						
 				}else {
 					matrix_bridge[k][i]=matrix_bridge[k][i-1];
 					matrix_arch[k][i]=matrix_arch[k][i-1];
@@ -156,13 +166,6 @@ fn find_path(_coordinate_x:Vec<usize>,_coordinate_y:Vec<usize>,_h:usize,_a:usize
 	
 	
 	
-	for i in 0.._coordinate_y.len(){
-		for j in 0.._coordinate_x.len(){
-			print! ("{}\t",matrix[j][i]);
-		}
-		println!();
-
-	}
 	matrix[_coordinate_x.len()-1][_coordinate_y.len()-1]
 }
 
