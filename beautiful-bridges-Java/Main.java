@@ -21,7 +21,7 @@ public class Main {
                 lista1 = input.split(" ");
                 matriz[i][0] = Integer.parseInt(lista1[0]);
                 matriz[i][1] = Integer.parseInt(lista1[1]);
-                if(!(matriz[i][0]>=0 && matriz[i][0]<=Math.pow(10,5) && matriz[i][1]>=0 &&matriz[i][1]<h && matriz[i-1][0]<matriz[i][0])){
+                if(!(matriz[i][0]>=0 && matriz[i][0]<=Math.pow(10,5) && matriz[i][1]>=0 &&matriz[i][1]<h )){
                     verificar=false;
                 }
             }
@@ -79,7 +79,7 @@ public class Main {
         for (int v=0;v<lista.size()-1;v++){
             distancias.add(matrix[lista.get(v)][0]-matrix[lista.get(v+1)][0]);
         }
-        for (int z:distancias){
+        /*for (int z:distancias){
             System.out.println(z);
         }
         /*System.out.println("Pilares");
@@ -98,5 +98,9 @@ public class Main {
     public static long costo1(long h,long d,long a,long b){
         long m=(a*h)+((d*d)*b);
         return m;
+    }
+    public static boolean radio(int x,int y,int heigh,double rad){
+        double r=Math.sqrt((Math.pow(rad,2))+Math.pow(x,2));
+        return (heigh-r)>y;
     }
 }
