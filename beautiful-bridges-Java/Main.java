@@ -21,9 +21,12 @@ public class Main {
                 lista1 = input.split(" ");
                 matriz[i][0] = Integer.parseInt(lista1[0]);
                 matriz[i][1] = Integer.parseInt(lista1[1]);
-                if(!(matriz[i][0]>=0 && matriz[i][0]<=Math.pow(10,5) && matriz[i][1]>=0 &&matriz[i][1]<h )){
+                if(!(matriz[i][0]>=0 && matriz[i][0]<=Math.pow(10,5) && matriz[i][1]>=0 &&matriz[i][1]<h && matriz[i-1][0]<matriz[i][0]) && i>1){
+                    System.out.println("entre");
                     verificar=false;
+                    System.out.println(verificar);
                 }
+                System.out.println(verificar);
             }
             if(verificar){
                 System.out.println(cost(n, h, a, b, matriz));
