@@ -27,7 +27,11 @@ public class Main {
 
             }
             if(verificar){
-                System.out.println(cost(n, h, a, b, matriz));
+                if (cost(n, h, a, b, matriz) != -1){
+                    System.out.println(cost(n, h, a, b, matriz));
+                }else{
+                    System.out.println("impossible");
+                }
             }else{
                 System.out.println("impossible");
             }
@@ -80,6 +84,49 @@ public class Main {
         for (int v=0;v<lista.size()-1;v++){
             distancias.add(matrix[lista.get(v)][0]-matrix[lista.get(v+1)][0]);
         }
+
+        long pilares [] [] = new long [3][n];
+        for (int j = 0; j <3 ; j++) {
+            pilares[j][0]=0;
+        }
+        for (int j = 1; j <n ; j++) {
+            if (lista.contains(j)){
+                pilares[0][j]=1;
+            }else{
+                pilares[0][j]=0;
+            }
+        }
+        for (int j = 1; j <n-1; j++) {
+            if(pilares[0][j]==1 && pilares[0][j+1]==1){
+                pilares[1][j]=matrix[j+1][0]-matrix[j][0];
+            }else{
+                if(pilares[0][j]==1 && pilares[0][j-1]==1){
+                    pilares[1][j]=pilares[1][j-1];
+                }else{
+                    if(pilares[0][j]==0 && pilares[0][j+1]==1){
+                        pilares[1][j]=matrix[j+1][0]-matrix[j-1][0];
+                    }
+
+                }
+            }
+        }//*/
+        pilares[1][n-1]=pilares[1][n-2];
+        boolean puente=true;
+        for (int j = 1; j <n ; j++) {
+            if (radio(matrix[j][0],matrix[j][1],h,pilares[1][j]/2)){
+                puente=false;
+                pilares[2][j]=0;
+                break;
+            }else{
+                pilares[2][j]=1;
+            }
+        }/*
+        for(int x = 0; x < pilares.length; x++){
+            for(int j = 0; j < pilares[x].length; j++){
+                System.out.print(pilares[x][j] + "\t");	// Imprime elemento
+            }
+            System.out.println();	// Imprime salto de línea
+        }//*/
         /*for (int z:distancias){
             System.out.println(z);
         }
@@ -94,14 +141,17 @@ public class Main {
             }
             System.out.println();	// Imprime salto de línea
         }*/
-        return costo[costo.length-1][costo[0].length-1];
+        if (puente){
+            return costo[costo.length-1][costo[0].length-1];
+        }
+        return -1;
     }
     public static long costo1(long h,long d,long a,long b){
         long m=(a*h)+((d*d)*b);
         return m;
     }
-    public static boolean radio(int x,int y,int heigh,double rad){
-        double r=Math.sqrt((Math.pow(rad,2))+Math.pow(x,2));
-        return (heigh-r)>y;
+    public static boolean radio(int x,int y,long heigh,double rad){
+        double r=Math.sqrt((Math.pow(rad,2))+Math.pow((x),2));
+        return y>r;
     }
 }
