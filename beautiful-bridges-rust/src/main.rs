@@ -10,7 +10,7 @@ fn main() {
 		
 	let _num_iter:usize = match _first_line[0].trim().parse(){
 		Ok(num)=>{
-			if num < 2 {
+			if num < 2 || num>10000{
 				println!("impossible");
 				process::exit(0x0100);
 			}
@@ -24,7 +24,7 @@ fn main() {
 	};
 	let _h:usize = match _first_line[1].trim().parse(){
 		Ok(num)=>{
-			if num < 1 {
+			if num < 1 || num >100000{
 				println!("impossible");
 				process::exit(0x0100)
 			}
@@ -40,7 +40,7 @@ fn main() {
 	}; 
 	let _a:usize = match _first_line[2].trim().parse(){
 		Ok(num)=>{
-			if num <1{
+			if num < 1 || num > 10000{
 				println!("impossible");
 				process::exit(0x0100)
 			}
@@ -53,7 +53,7 @@ fn main() {
 	};
 	let _b:usize = match _first_line[3].trim().parse(){
 		Ok(num)=>{
-			if num<1{
+			if num<1 || num > 10000{
 				println!("impossible");
 				process::exit(0x0100)
 			}
@@ -73,7 +73,13 @@ fn main() {
 		io::stdin().read_line(&mut temp).unwrap();
 		let vec_temp:Vec<&str>=temp.split(" ").collect();
 		_coordinate_x.push(match vec_temp[0].trim().parse(){
-			Ok(num) => num,
+			Ok(num) =>{ 
+				if num > 1000000{
+					println!("impossible");
+					process::exit(0x0100)
+				}
+				num
+			},
 			Err(_)=>{
 				println!("impossible");
 				process::exit(0x0100)
@@ -82,7 +88,7 @@ fn main() {
 		});
 		_coordinate_y.push(match vec_temp[1].trim().parse(){
 			Ok(num)=>{
-				if num>_h{
+				if num>_h || num > 100000{
 					println!("impossible");
 					process::exit(0x0100)
 				}
@@ -96,6 +102,14 @@ fn main() {
 
 		});
 		i=i+1;
+		
+	}
+	for i in 1.. _coordinate_x.len(){
+		if _coordinate_x[i]<=_coordinate_x[i-1]{
+			println!("impossible");
+			process::exit(0x0100);
+		}
+
 	}
 	let ojala = find_path(_coordinate_x,_coordinate_y,_h,_a,_b);
 	println!("{}",ojala);
@@ -125,7 +139,7 @@ fn find_path(_coordinate_x:Vec<usize>,_coordinate_y:Vec<usize>,_h:usize,_a:usize
 		matrix_bridge[i][0]=matrix_bridge[0][0]+_a*(_h-_coordinate_y[i]);
 		matrix_arch[i][0]=matrix_arch[0][0]+_b*(usize::pow(_coordinate_x[i]-_coordinate_x[0],2));	
 		_r=(_coordinate_x[i]-_coordinate_x[0])/2;
-		if _r+_coordinate_y[i]> _h{
+		if _r+_coordinate_y[i]> _h {
 			println!("impossible");
 			process::exit(0x0100);
 		}
@@ -149,6 +163,14 @@ fn find_path(_coordinate_x:Vec<usize>,_coordinate_y:Vec<usize>,_h:usize,_a:usize
 					matrix_bridge[k][i]=temp_bridge;
 					matrix_arch[k][i]=temp_arch;
 					_r=(_coordinate_x[k]-_coordinate_x[i])/2;
+					for w in i..k{
+						if _coordinate_y[w] as f64 > ((usize::pow(_r,2)+(usize::pow(_coordinate_x[w]-((_coordinate_x[i]+_coordinate_x[k])/2)as usize  ,2))) as f64).sqrt() + (_h-_r)as f64 {
+							println!("impossible");
+							process::exit(0x0100)
+						}
+
+					}
+					
 					if _r+_coordinate_y[k]>_h{
 						println!("impossible");
 						process::exit(0x0100);
@@ -168,4 +190,3 @@ fn find_path(_coordinate_x:Vec<usize>,_coordinate_y:Vec<usize>,_h:usize,_a:usize
 	
 	matrix[_coordinate_x.len()-1][_coordinate_y.len()-1]
 }
-
