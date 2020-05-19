@@ -27,8 +27,9 @@ public class Main {
 
             }
             if(verificar){
-                if (cost(n, h, a, b, matriz) != -1){
-                    System.out.println(cost(n, h, a, b, matriz));
+                long result=cost(n, h, a, b, matriz);
+                if (result!= -1){
+                    System.out.println(result);
                 }else{
                     System.out.println("impossible");
                 }
@@ -67,23 +68,22 @@ public class Main {
 
             }
         }
-        int i=n-1;
+
+
+        int i=n-2;
         int k=n-1;
         ArrayList <Integer> lista=new ArrayList<Integer>();
-        lista.add(i);
         while (i>0 && k>0){
-            if(costo[i][k]!=costo[i-1][k]){
+            if(costo[i][k]!=costo[i-1][k]&&i!=1){
                 lista.add(i);
                 i=i-1;
-                k=k-1;
+                k=k-(i-1);
             }else{
                 i=i-1;
             }
         }
-        ArrayList<Integer> distancias=new ArrayList<Integer>();
-        for (int v=0;v<lista.size()-1;v++){
-            distancias.add(matrix[lista.get(v)][0]-matrix[lista.get(v+1)][0]);
-        }
+        lista.add(1);
+        lista.add(n-1);
 
         long pilares [] [] = new long [3][n];
         for (int j = 0; j <3 ; j++) {
@@ -113,7 +113,7 @@ public class Main {
         pilares[1][n-1]=pilares[1][n-2];
         boolean puente=true;
         for (int j = 1; j <n ; j++) {
-            if (radio(matrix[j][0],matrix[j][1],h,pilares[1][j]/2)){
+            if ((radio(matrix[j][0],matrix[j][1],h,pilares[1][j]/2))){
                 puente=false;
                 pilares[2][j]=0;
                 break;
@@ -127,20 +127,19 @@ public class Main {
             }
             System.out.println();	// Imprime salto de línea
         }//*/
-        /*for (int z:distancias){
-            System.out.println(z);
-        }
-        /*System.out.println("Pilares");
+        /*
+        System.out.println("\nPilares");
         for (int z:lista){
-            System.out.println(z);
-        }*/
-
-        /*for(int i = 0; i < costo.length; i++){
-            for(int j = 0; j < costo[i].length; j++){
-                System.out.print(costo[i][j] + " ");	// Imprime elemento
+            System.out.print(z+" ,");
+        }//*/
+    /*
+        System.out.println("\nCOSTO");
+        for(int A = 0; A < costo.length; A++){
+            for(int j = 0; j < costo[A].length; j++){
+                System.out.print(costo[A][j] + " ");	// Imprime elemento
             }
             System.out.println();	// Imprime salto de línea
-        }*/
+        }//*/
         if (puente){
             return costo[costo.length-1][costo[0].length-1];
         }
