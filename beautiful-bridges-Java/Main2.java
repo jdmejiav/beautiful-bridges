@@ -12,7 +12,6 @@ public class Main2 {
         long a=Integer.parseInt(lista1[2]);
         long b=Integer.parseInt(lista1[3]);
         boolean verificar=true;
-        boolean trol;
         if (n>=2 && n<=Math.pow(10,4) && h>=1 && h<=Math.pow(10,5)&&a>=1&&a<=Math.pow(10,4)&&b>=1&&b<=Math.pow(10,4)) {
             int[][] matriz = new int[n+1][2];
             for (int i = 1; i <= n; i++) {
