@@ -134,7 +134,7 @@ public class Main2 {
                 pilares[2][j]=1;
             }
         }
-        /*
+/*
         for(int x = 0; x < pilares.length; x++){
             for(int j = 0; j < pilares[x].length; j++){
                 System.out.print(pilares[x][j] + "\t");	// Imprime elemento
@@ -163,8 +163,8 @@ public class Main2 {
         long m=(a*h)+((d*d)*b);
         return m;
     }
-    public static boolean radio(int x,int y,long heigh,double rad){
-        double r=Math.sqrt((Math.pow(rad,2))+Math.pow((x),2));
-        return y>r;
+    public static boolean radio(int x,int hy,long heigh,double rad){
+        double y=Math.sqrt(Math.pow(rad,2)-Math.pow((x-rad),2))+(heigh-rad);
+        return y>=heigh;
     }
 }
