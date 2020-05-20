@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main {
+public class Main2 {
 
     public static void main(String[] args) {
         Scanner registro=new Scanner(System.in);
@@ -12,20 +12,31 @@ public class Main {
         long a=Integer.parseInt(lista1[2]);
         long b=Integer.parseInt(lista1[3]);
         boolean verificar=true;
+        boolean trol;
         if (n>=2 && n<=Math.pow(10,4) && h>=1 && h<=Math.pow(10,5)&&a>=1&&a<=Math.pow(10,4)&&b>=1&&b<=Math.pow(10,4)) {
-            int[][] matriz = new int[n + 1][n + 1];
-            matriz[0][0]=0;
-            matriz[0][1]=0;
+            int[][] matriz = new int[n+1][2];
             for (int i = 1; i <= n; i++) {
                 input = registro.nextLine();
                 lista1 = input.split(" ");
                 matriz[i][0] = Integer.parseInt(lista1[0]);
                 matriz[i][1] = Integer.parseInt(lista1[1]);
-                if(!(matriz[i][0]>=0 && matriz[i][0]<=Math.pow(10,5) && matriz[i][1]>=0 &&matriz[i][1]<h && matriz[i-1][0]<matriz[i][0]) && i>1){
-                    verificar=false;
+                if(i>1) {
+                    if (!(matriz[i][0] >= 0 && matriz[i][0] <= Math.pow(10, 5) && matriz[i][1] >= 0 && matriz[i][1] < h && matriz[i - 1][0] < matriz[i][0])) {
+                        verificar = false;
+                    }
                 }
 
             }
+    /*
+            System.out.println("\nposiciones");
+            for(int A = 0; A < matriz.length; A++){
+                for(int j = 0; j < matriz[A].length; j++){
+                    System.out.print(matriz[A][j] + " ");	// Imprime elemento
+                }
+                System.out.println();	// Imprime salto de línea
+            }//*/
+
+
             if(verificar){
                 long result=cost(n, h, a, b, matriz);
                 if (result!= -1){
@@ -54,8 +65,11 @@ public class Main {
         long distancia;
         for(int i=1;i<n;i++){
             for(int j=1;j<n;j++){
-                distancia=matrix[i][0]-matrix[j][0];
+                //System.out.println("I= "+i+"\nJ="+j);
+                distancia=Math.abs(matrix[i][0]-matrix[j][0]);
+               // System.out.println("distancia:\nmatrix[i][0]-matrix[j][0]= "+matrix[i][0]+"-"+matrix[j][0]+"="+distancia);
                 altura=h-matrix[j][1];
+                //System.out.println("altura=h-matrix[j][1]= "+h+"-"+matrix[j][1]+"="+altura);
                 if(i==1){
                     costo[i][j]=costo1(altura,distancia,a,b)+costo[i][i];
                 }else{
@@ -120,19 +134,20 @@ public class Main {
             }else{
                 pilares[2][j]=1;
             }
-        }/*
+        }
+        /*
         for(int x = 0; x < pilares.length; x++){
             for(int j = 0; j < pilares[x].length; j++){
                 System.out.print(pilares[x][j] + "\t");	// Imprime elemento
             }
             System.out.println();	// Imprime salto de línea
         }//*/
-        /*
+/*
         System.out.println("\nPilares");
         for (int z:lista){
             System.out.print(z+" ,");
         }//*/
-    /*
+/*
         System.out.println("\nCOSTO");
         for(int A = 0; A < costo.length; A++){
             for(int j = 0; j < costo[A].length; j++){
