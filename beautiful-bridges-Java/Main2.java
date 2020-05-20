@@ -90,7 +90,7 @@ public class Main2 {
             if(costo[i][k]!=costo[i-1][k]&&i!=1){
                 lista.add(i);
                 i=i-1;
-                k=k-(i-1);
+                k=k-1;
             }else{
                 i=i-1;
             }
@@ -125,16 +125,31 @@ public class Main2 {
         }//*/
         pilares[1][n-1]=pilares[1][n-2];
         boolean puente=true;
+        int count=0;
         for (int j = 1; j <n ; j++) {
-            if ((radio(matrix[j][0],matrix[j][1],h,pilares[1][j]/2))){
-                puente=false;
-                pilares[2][j]=0;
-                break;
+            //System.out.println("RADIO="+pilares[1][j]/2+"\nx="+matrix[j][0]+"\ny="+matrix[j][1]);
+            if(count%2==0||j>2){
+                if ((radio1(matrix[j][0],matrix[j][1],h,pilares[1][j]/2))){
+                    puente=false;
+                    pilares[2][j]=0;
+                    break;
+                }else{
+                    pilares[2][j]=1;
+                }
             }else{
-                pilares[2][j]=1;
+                if ((radio(matrix[j][0],matrix[j][1],h,pilares[1][j]/2))){
+                    puente=false;
+                    pilares[2][j]=0;
+                    break;
+                }else{
+                    pilares[2][j]=1;
+                }
             }
+
+            count++;
         }
-/*
+        /*
+        System.out.println("Matriz pilares");
         for(int x = 0; x < pilares.length; x++){
             for(int j = 0; j < pilares[x].length; j++){
                 System.out.print(pilares[x][j] + "\t");	// Imprime elemento
@@ -164,7 +179,15 @@ public class Main2 {
         return m;
     }
     public static boolean radio(int x,int hy,long heigh,double rad){
-        double y=Math.sqrt(Math.pow(rad,2)-Math.pow((x-rad),2))+(heigh-rad);
+        double y=Math.sqrt(Math.abs(Math.pow(rad,2)-Math.pow((x-rad),2)))+(heigh-rad);
+        double r1=heigh-rad;
+        double r2=(x-rad);
+        return y>=heigh;
+    }
+    public static boolean radio1(int x,int hy,long heigh,double rad){
+        double y=Math.sqrt(Math.pow(rad,2)-Math.pow((x+rad),2))+(heigh-rad);
+        double r1=heigh-rad;
+        double r2=(x+rad);
         return y>=heigh;
     }
 }
