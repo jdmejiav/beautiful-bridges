@@ -93,6 +93,7 @@ public class Main2 {
         int i=n-1;
         int k=n-1;
         //*/
+        long [] list=new long [n-1];
         ArrayList <Integer> lista=new ArrayList<Integer>();
         /*while (i>0 && k>0){
             long a1=costo[i][k];
@@ -106,21 +107,27 @@ public class Main2 {
             }
         }//*/
         int z=2;
-        for(int i=1;i<n-1;i++){
-            while(costo[i][i]+costo[i][z]>costo[i][z+1]){
+        if(n-1!=2) {
+            for (int i = 1; i < n - 1; i++) {
+                while (costo[i][i] + costo[i][z] > costo[i][z + 1]) {
+                    if (z+1 == n - 1) {
+                        break;
+                    }else{
+                        z++;
+                    }
+                }
+                list[i] = z;
                 z++;
-            }
-            lista.add(z);
-            z++;
             /*
             for (int zz:lista){
                 System.out.print(zz+" ,");
             }
             System.out.println();//*/
-            if(z==n-1)break;
+                if (z == n - 1) break;
+            }
         }
-        lista.add(1);
-        lista.add(n-1);
+        list[0]=1;
+        list[n-2]=n-1;
 
 
 
@@ -130,7 +137,7 @@ public class Main2 {
             pilares[j][0]=0;
         }
         for (int j = 1; j <n ; j++) {
-            if (lista.contains(j)){
+            if (buscar(j,list)){
                 pilares[0][j]=1;
             }else{
                 pilares[0][j]=0;
@@ -223,5 +230,15 @@ public class Main2 {
         double r1=heigh-rad;
         double r2=(x-(x-rad));
         return hy<=y;
+    }
+    public static boolean buscar(long element,long [] array){
+        boolean esta=false;
+        for(int i=0;i<array.length;i++){
+            if (array[i]==element){
+                esta=true;
+                break;
+            }
+        }
+        return esta;
     }
 }
