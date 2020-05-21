@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-//
-public class Main3 {
+
+public class Main2 {
 
     public static void main(String[] args) {
         Scanner registro=new Scanner(System.in);
