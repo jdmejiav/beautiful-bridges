@@ -10,7 +10,7 @@ fn main() {
 		
 	let _num_iter:usize = match _first_line[0].trim().parse(){
 		Ok(num)=>{
-			if num < 2 || num>10000{
+			if num < 2 || num> 10000{
 				println!("impossible");
 				process::exit(0x0100);
 			}
@@ -24,7 +24,7 @@ fn main() {
 	};
 	let _h:usize = match _first_line[1].trim().parse(){
 		Ok(num)=>{
-			if num < 1 || num >100000{
+			if num < 1 || num >= 100000{
 				println!("impossible");
 				process::exit(0x0100)
 			}
@@ -40,7 +40,7 @@ fn main() {
 	}; 
 	let _a:usize = match _first_line[2].trim().parse(){
 		Ok(num)=>{
-			if num < 1 || num > 10000{
+			if num < 1 || num >= 10000{
 				println!("impossible");
 				process::exit(0x0100)
 			}
@@ -53,7 +53,7 @@ fn main() {
 	};
 	let _b:usize = match _first_line[3].trim().parse(){
 		Ok(num)=>{
-			if num<1 || num > 10000{
+			if num<1 || num >= 10000{
 				println!("impossible");
 				process::exit(0x0100)
 			}
@@ -74,7 +74,7 @@ fn main() {
 		let vec_temp:Vec<&str>=temp.split(" ").collect();
 		_coordinate_x.push(match vec_temp[0].trim().parse(){
 			Ok(num) =>{ 
-				if num > 1000000{
+				if num >= 100000{
 					println!("impossible");
 					process::exit(0x0100)
 				}
@@ -88,7 +88,7 @@ fn main() {
 		});
 		_coordinate_y.push(match vec_temp[1].trim().parse(){
 			Ok(num)=>{
-				if num>_h || num > 100000{
+				if num>_h || num >= 100000{
 					println!("impossible");
 					process::exit(0x0100)
 				}
@@ -139,15 +139,23 @@ fn find_path(_coordinate_x:Vec<usize>,_coordinate_y:Vec<usize>,_h:usize,_a:usize
 		matrix_bridge[i][0]=matrix_bridge[0][0]+_a*(_h-_coordinate_y[i]);
 		matrix_arch[i][0]=matrix_arch[0][0]+_b*(usize::pow(_coordinate_x[i]-_coordinate_x[0],2));	
 		_r=(_coordinate_x[i]-_coordinate_x[0])/2;
-		if _r+_coordinate_y[i]> _h {
+		/*if _r+_coordinate_y[i]> _h {
+			println!("lo mandaron a la mierda en el primer ciclo cuando  r= {} en la corrdenada ({},{})",_r,_coordinate_x[i],_coordinate_y[i]);
 			println!("impossible");
 			process::exit(0x0100);
-		}
+		}*/
 		matrix[i][0] = matrix_bridge[i][0]+matrix_arch[i][0]; 		
 	}
 	
 	for i in 1.._coordinate_y.len(){
+/*
+		for j in 0.._coordinate_x.len(){
+			for w in 0.._coordinate_x.len(){
+				println!("{}\t",matrix[w][i]);
+			}
 
+		}
+*/
 		for k in i.._coordinate_x.len(){
 			
 			if  i==k{
@@ -156,27 +164,38 @@ fn find_path(_coordinate_x:Vec<usize>,_coordinate_y:Vec<usize>,_h:usize,_a:usize
 				matrix[i][i]=matrix[i][i-1]; 
 			}else{
 			
-			let temp_bridge= matrix_bridge[i][i]+_a*(_h-_coordinate_y[k]);
-			let temp_arch= matrix_arch[i][i]+_b*(usize::pow(_coordinate_x[k]-_coordinate_x[i],2));
+			let temp_bridge= matrix_bridge[i][i-1]+_a*(_h-_coordinate_y[k]);
+			let temp_arch= matrix_arch[i][i-1]+_b*(usize::pow(_coordinate_x[k]-_coordinate_x[i],2));
 				
 				if temp_bridge+temp_arch < matrix[k][i-1]{
+				
+					/*_r=(_coordinate_x[k]-_coordinate_x[i])/2;
+						
+					if _r+_coordinate_y[k]>_h{
+						//println!("lo mandaron a la mierda cuando r= {} en la corrdenada ({},{})",_r,_coordinate_x[k],_coordinate_x[k]);
+						//println!("impossible");
+						//process::exit(0x0100);
+						
+					}
+					*/
 					matrix_bridge[k][i]=temp_bridge;
 					matrix_arch[k][i]=temp_arch;
-					_r=(_coordinate_x[k]-_coordinate_x[i])/2;
-					for w in i..k{
-						if _coordinate_y[w] as f64 > ((usize::pow(_r,2)+(usize::pow(_coordinate_x[w]-((_coordinate_x[i]+_coordinate_x[k])/2)as usize  ,2))) as f64).sqrt() + (_h-_r)as f64 {
-							println!("impossible");
-							process::exit(0x0100)
-						}
+					/*for j in i..k{
 
-					}
-					
-					if _r+_coordinate_y[k]>_h{
-						println!("impossible");
-						process::exit(0x0100);
-					}
-					matrix[k][i]=temp_bridge+temp_arch;
+						let x1: isize = (_r+_coordinate_x[i]) as isize;
+						let y1: f64 = (_h-_r) as f64;
+						let x: isize = _coordinate_x[j] as isize;
+						let y: f64 = _coordinate_y[j] as f64;
+						let cond:f64  = (isize::pow(_r as isize,2) - isize::pow(x-x1,2))as f64;
 						
+						if y  >= cond.sqrt() + y1{
+						//	println!("Dudo que sea acá pero que no quede");
+							println!("impossible");
+							process::exit(0x0100);
+						}
+					}*/
+					
+					matrix[k][i]=temp_bridge+temp_arch;						
 				}else {
 					matrix_bridge[k][i]=matrix_bridge[k][i-1];
 					matrix_arch[k][i]=matrix_arch[k][i-1];
@@ -185,8 +204,33 @@ fn find_path(_coordinate_x:Vec<usize>,_coordinate_y:Vec<usize>,_h:usize,_a:usize
 			}
 		}
 	}
+/*	println!();
+	println!("Matriz costo puentes\n");
 	
+	for i in 0.._coordinate_y.len(){
+		for k in 0.._coordinate_x.len(){
+			print!("{}\t",matrix_bridge[k][i]);
+		}
+		println!();
+	}
+
+	println!("Matriz costo arcos\n");
+	for i in 0.._coordinate_y.len(){
+		for k in 0.._coordinate_x.len(){
+			print!("{}\t",matrix_arch[k][i]);
+		}
+		println!();
+	}
 	
+	println!("Matriz suma\n");
+	for i in 0.._coordinate_y.len(){
+		for k in 0.._coordinate_x.len(){
+			print!("{}\t",matrix[k][i]);
+		}
+		println!();
+	}
+	
+*/	
 	
 	matrix[_coordinate_x.len()-1][_coordinate_y.len()-1]
 }
