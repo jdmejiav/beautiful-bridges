@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main2 {
@@ -25,18 +24,7 @@ public class Main2 {
                         break;
                     }
                 }
-
             }
-/*
-            System.out.println("\nposiciones");
-            for(int A = 0; A < matriz.length; A++){
-                for(int j = 0; j < matriz[A].length; j++){
-                    System.out.print(matriz[A][j] + " ");	// Imprime elemento
-                }
-                System.out.println();	// Imprime salto de línea
-            }//*/
-
-
             if(verificar){
                 long result=cost(n, h, a, b, matriz);
                 if (result!= -1){
@@ -47,7 +35,6 @@ public class Main2 {
             }else{
                 System.out.println("impossible");
             }
-
         }else{
             System.out.println("impossible");
         }
@@ -79,34 +66,9 @@ public class Main2 {
                         costo[i][j]=costo[i-1][j];
                     }
                 }
-
             }
         }
-/*
-        System.out.println("\nCOSTO");
-        for(int A = 0; A < costo.length; A++){
-            for(int j = 0; j < costo[A].length; j++){
-                System.out.print(costo[A][j] + " ");	// Imprime elemento
-            }
-            System.out.println();	// Imprime salto de línea
-        }//*/
-        /*
-        int i=n-1;
-        int k=n-1;
-        //*/
         long [] list=new long [n-1];
-        ArrayList <Integer> lista=new ArrayList<Integer>();
-        /*while (i>0 && k>0){
-            long a1=costo[i][k];
-            long a2=costo[i-1][k];
-            if(costo[i][k]!=costo[i-1][k]&&i!=1){
-                lista.add(i);
-                i=i-1;
-                k=k-1;
-            }else{
-                i=i-1;
-            }
-        }//*/
         int z=2;
         if(n-1!=2) {
             for (int i = 1; i < n - 1; i++) {
@@ -119,20 +81,11 @@ public class Main2 {
                 }
                 list[i] = z;
                 z++;
-            /*
-            for (int zz:lista){
-                System.out.print(zz+" ,");
-            }
-            System.out.println();//*/
                 if (z == n - 1) break;
             }
         }
         list[0]=1;
         list[n-2]=n-1;
-
-
-
-
         long pilares [] [] = new long [3][n];
         for (int j = 0; j <3 ; j++) {
             pilares[j][0]=0;
@@ -154,37 +107,22 @@ public class Main2 {
                     if(pilares[0][j]==0 && pilares[0][j+1]==1){
                         pilares[1][j]=matrix[j+1][0]-matrix[j-1][0];
                     }
-
                 }
             }
-        }//*/
-
+        }
         boolean puente=true;
         pilares[1][n-1]=pilares[1][n-2];
-        int count=0;
         for (int j = 1; j <n ; j++) {
             //System.out.println("RADIO="+pilares[1][j]/2+"\nx="+matrix[j][0]+"\ny="+matrix[j][1]);
-            if(count%2==0||j>2){
-                if ((radio1(matrix[j][0],matrix[j][1],h,pilares[1][j]/2,pilares,matrix,j))||!(radio2(matrix[j][0],matrix[j][1],h,pilares[1][j]/2))){
-                    puente=false;
-                    pilares[2][j]=0;
-                    break;
-                }else{
-                    pilares[2][j]=1;
-                }
-            }else{
-                if ((radio(matrix[j][0],matrix[j][1],h,pilares[1][j]/2,pilares,matrix,j))||!(radio2(matrix[j][0],matrix[j][1],h,pilares[1][j]/2))){
-                    puente=false;
-                    pilares[2][j]=0;
-                    break;
-                }else{
-                    pilares[2][j]=1;
-                }
+            if ((radio(matrix[j][0], matrix[j][1], h, pilares[1][j] / 2)) || !(radio2(matrix[j][0], matrix[j][1], h, pilares[1][j] / 2, pilares, matrix, j))) {
+                puente = false;
+                pilares[2][j] = 0;
+                break;
+            } else {
+                pilares[2][j] = 1;
             }
-
-            count++;
         }
-/*
+
         System.out.println("Matriz pilares");
         for(int x = 0; x < pilares.length; x++){
             for(int j = 0; j < pilares[x].length; j++){
@@ -192,12 +130,7 @@ public class Main2 {
             }
             System.out.println();	// Imprime salto de línea
         }//*/
-/*
-        System.out.println("\nPilares");
-        for (int zz:lista){
-            System.out.print(zz+" ,");
-        }//*/
-/*
+
         System.out.println("\nCOSTO");
         for(int A = 0; A < costo.length; A++){
             for(int j = 0; j < costo[A].length; j++){
@@ -214,43 +147,19 @@ public class Main2 {
         long m=(a*h)+((d*d)*b);
         return m;
     }
-    public static boolean radio(int x,int hy,long heigh,double rad,long [][]pilar,int [] [] cont,int g){
-        double x1=x;
-        if (x-rad>0 && pilar[0][g]==1){
-            x1=x-rad;
-        }else {
-            if (pilar[0][g]==0 || (cont[g-1][0]+rad)-x>0){
-                x1=x1+Math.abs((cont[g-1][0]+rad));
-                double y = Math.sqrt(Math.abs(Math.pow(rad, 2) - Math.pow((x1), 2))) + (heigh - rad);
-                double r1 = heigh - rad;
-                double r2 = (x - rad);
-                return y > heigh;
-            }
-        }
-        double y = Math.sqrt(Math.abs(Math.pow(rad, 2) - Math.pow((x1 - rad), 2))) + (heigh - rad);
-        double r1 = heigh - rad;
-        double r2 = (x - rad);
+    public static boolean radio(int x,int hy,long heigh,double rad){
+        double y = Math.sqrt(Math.abs(Math.pow(rad, 2) - Math.pow(0, 2))) + (heigh - rad);
         return y > heigh;
     }
-    public static boolean radio1(int x,int hy,long heigh,double rad,long [][]pilar,int [] [] cont,int g){
+    public static boolean radio2(int x,int hy,long heigh,double rad,long [][]pilar,int [] [] cont,int g){
         double x1=x;
-        if (x-rad<0&&pilar[0][g]==1){
-            x1=x+rad;
-        }else{
-            if (pilar[0][g]==0 && (cont[g-1][0]+rad)-x>0){
-                x1=x1+Math.abs((cont[g-1][0]+rad)-x1);
-                double y = Math.sqrt(Math.abs(Math.pow(rad, 2) - Math.pow((x1-(cont[g-1][0]+rad)), 2))) + (heigh - rad);
-                double r1 = heigh - rad;
-                double r2 = (x - rad);
-                return y > heigh;
-            }
+        if (pilar[0][g]==0){
+            x1=Math.abs((cont[g-1][0]+rad));
+            double y=Math.sqrt(Math.pow(rad,2)-Math.pow((x-x1),2))+(heigh-rad);
+            double r1=heigh-rad;
+            double r2=(x-x1);
+            return hy<=y;
         }
-        double y=Math.sqrt(Math.pow(rad,2)-Math.pow((x1-rad),2))+(heigh-rad);
-        double r1=heigh-rad;
-        double r2=(x+rad);
-        return y>heigh;
-    }
-    public static boolean radio2(int x,int hy,long heigh,double rad){
         double y=Math.sqrt(Math.pow(rad,2)-Math.pow((x-(x-rad)),2))+(heigh-rad);
         double r1=heigh-rad;
         double r2=(x-(x-rad));
