@@ -1,1 +1,0 @@
-C:\Users\Juan\ Diego\home\Documentos\Repositorios\beautiful-bridges\beautiful-bridges-rust\target\debug\beautifull_bridges.exe: C:\Users\Juan\ Diego\home\Documentos\Repositorios\beautiful-bridges\beautiful-bridges-rust\src\main.rs
